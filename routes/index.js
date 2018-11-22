@@ -61,11 +61,14 @@ router.post('/info/deleteInfo' ,async function(req, res){
 });
 
 router.post('/info/queryInfo', async function(){
-  let id = req.body.data.id;
+  let id = req.body.data.id,
+      source = req.body.data.source,
+      category = req.body.data.category;
+
 
   let result,catch_err;
   try{
-    result = infomgr.queryInfo(id);
+    result = infomgr.queryInfo(id, source, category);
   }catch(err){
     catch_err = err;
   }
