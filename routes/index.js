@@ -5,17 +5,17 @@ const message = require('../node_modules/infomgr/lib/message');
 
 /* ADD INFO TO THE DATABASE */
 router.post('/info/addInfo', async function (req, res) {
-  let year = req.body.year,
-      month = req.body.month,
-      day = req.body.day, 
-      source = req.body.source, 
-      category = req.body.category, 
-      subcategory = req.body.subcategory, 
-      title = req.body.title, 
-      subtitle = req.body.subtitle, 
-      content = req.body.content, 
-      remark = req.body.remark, 
-      level = req.body.level;
+  let year = req.body.data.year,
+      month = req.body.data.month,
+      day = req.body.data.day, 
+      source = req.body.data.source, 
+      category = req.body.data.category, 
+      subcategory = req.body.data.subcategory, 
+      title = req.body.data.title, 
+      subtitle = req.body.data.subtitle, 
+      content = req.body.data.content, 
+      remark = req.body.data.remark, 
+      level = req.body.data.level;
   
   let result,catch_err; 
   try{
@@ -38,7 +38,7 @@ router.post('/info/addInfo', async function (req, res) {
 });
 
 router.post('/info/deleteInfo' ,async function(req, res){
-  let id = req.body.id;
+  let id = req.body.data.id;
   
   let result,catch_err;
   try{
@@ -61,7 +61,7 @@ router.post('/info/deleteInfo' ,async function(req, res){
 });
 
 router.post('/info/queryInfo', async function(){
-  let id = req.body.id;
+  let id = req.body.data.id;
 
   let result,catch_err;
   try{
@@ -84,13 +84,22 @@ router.post('/info/queryInfo', async function(){
 });
 
 router.post('/info/updataInfo', async function(req, res){
-  let query_json = req.body.query_json;
-  let update_json =req.body.update_json;
-  let option = req.body.option;
+  let modify_id = req.body.data.modify_id,
+      year = req.body.data.year,
+      month = req.body.data.month,
+      day = req.body.data.day, 
+      source = req.body.data.source, 
+      category = req.body.data.category, 
+      subcategory = req.body.data.subcategory, 
+      title = req.body.data.title, 
+      subtitle = req.body.data.subtitle, 
+      content = req.body.data.content, 
+      remark = req.body.data.remark, 
+      level = req.body.data.level;
 
   let result,catch_err;
   try{
-    result = await infomgr.updateInfo(query_json, update_json, option);
+    result = await infomgr.updateInfo(modify_id, year, month, day, source, category, subcategory, title, subtitle, content, remark, level, option = {});
   }catch(err){
     catch_err = err;
   }
