@@ -37,8 +37,8 @@ router.post('/info/addInfo', async function (req, res) {
   }
 });
 
-router.post('/info/deleteInfo' ,async function(req, res){
-  let id = req.body.data.id;
+router.post('/delete' ,async function(req, res){
+  let id = req.body.data.remove_id;
   
   let result,catch_err;
   try{
@@ -60,7 +60,7 @@ router.post('/info/deleteInfo' ,async function(req, res){
   }
 });
 
-router.post('/info/queryInfo', async function(){
+router.post('/query', async function(){
   let id = req.body.data.id,
       source = req.body.data.source,
       category = req.body.data.category;
@@ -86,8 +86,8 @@ router.post('/info/queryInfo', async function(){
   }
 });
 
-router.post('/info/updataInfo', async function(req, res){
-  let modify_id = req.body.data.modify_id,
+router.post('/modify', async function(req, res){
+  let id = req.body.data.modify_id,
       year = req.body.data.year,
       month = req.body.data.month,
       day = req.body.data.day, 
@@ -102,7 +102,7 @@ router.post('/info/updataInfo', async function(req, res){
 
   let result,catch_err;
   try{
-    result = await infomgr.updateInfo(modify_id, year, month, day, source, category, subcategory, title, subtitle, content, remark, level, option = {});
+    result = await infomgr.updateInfo(id, year, month, day, source, category, subcategory, title, subtitle, content, remark, level, option = {});
   }catch(err){
     catch_err = err;
   }
@@ -119,5 +119,27 @@ router.post('/info/updataInfo', async function(req, res){
     res.status(422).jsonp(err_message);  
   }
 });
+
+router.get('/alldata', async function(req, res){
+  
+  let result,catch_err;
+  try{
+    result = await infomgr.queryInfo();
+  }catch(err){
+    catch_err = err;
+  }
+
+  if(result == "OK"){
+    let senddata = {
+      "message" : result
+    }
+    res.status(200).jsonp(senddata);
+  }else if(catch_err.message == message.database_error){
+    let err_message = {
+      "message" : catch_err.message
+    }
+    res.status(422).jsonp(err_message);  
+  }
+})
 
 module.exports = router;
