@@ -54,7 +54,7 @@ HTTP 422
 
 ### deleteInfoById
 
-**POST** /info/deleteInfo
+**POST** /delete
 
 #### Request
 
@@ -84,7 +84,7 @@ HTTP 422
 
 ### queryInfo
 
-**POST** /info/queryInfo
+**POST** /query
   
 #### Request
 
@@ -116,11 +116,11 @@ HTTP 422
 
 ### updateInfo
 
-**POST** /info/updateInfo
+**POST** /modify
 
 #### Request
 
-* **modify_id** string
+* **id** string
 * **year** int
 * **month** int
 * **day** int
@@ -154,6 +154,34 @@ HTTP 422
     "message" : "ILLEGAL_DATE"
 }
 ```
+
+* datebase_error
+
+HTTP 422
+
+```JSON
+{
+     "message" :"DATABASE_ERROR"
+}
+```
+### Alldata
+
+**get** /alldata
+
+#### Request
+
+
+#### Response
+
+* Success
+  
+  HTTP 200
+
+  ```JSON
+  {
+      "message" : "OK"
+  }
+  ```
 
 * datebase_error
 
