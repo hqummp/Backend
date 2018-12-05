@@ -3,6 +3,24 @@ var router = express.Router();
 const infomgr = require('infomgr')
 const message = require('../node_modules/infomgr/lib/message');
 
+// handle uncaughtExpection
+const Layer = require('express/lib/router/layer');
+
+Object.defineProperty(Layer.prototype, 'handle', {
+  enumerable: true,
+  get() {
+    return this.__handle;
+  },
+  set(fn) {
+    if (fn.length === 4) {
+      this.__handle = fn;
+    } else {
+      this.__handle = (req, res, next) =>
+        Promise.resolve(fn(req, res, next)).catch(next);
+    }
+  },
+});
+
 /* ADD INFO TO THE DATABASE */
 router.post('/info/addInfo', async function (req, res) {
   let year = req.body.data.year,
@@ -140,6 +158,52 @@ router.get('/alldata', async function(req, res){
     }
     res.status(422).jsonp(err_message);  
   }
+})
+
+router.get('/source/:source', async function(req, res){
+  let source = decodeURI(req.params.source);
+
+  let result, catch_err;
+  try{
+    result = await infomgr.find(source);
+  }catch(err){
+    catch_err = err;
+  }
+
+  if(result == "OK"){
+    let senddata = {
+      "message" : result
+    };
+    res.status(200).jsonp(senddata);
+  }else if(catch_err.message == message.database_error){
+    let err_message = {
+      "message" : catch_err.message
+    };
+    res.status(422).jsonp(err_message);
+  }
+});
+
+router.get('/category/:category', async function(req, res){
+  let category = decodeURI(req.params.category);
+
+  let result, catch_err;
+  try{
+    result = await infomgr.find(category);
+  }catch(err){
+    catch_err = err;
+  }
+
+  if(result == "OK"){
+    let senddata = {
+      "message" : result
+    };
+    res.status(200).jsonp(senddata);
+  }else if(catch_err.message == message.database_error){
+    let err_message = {
+      "message" : catch_err.message
+    };
+    res.status(422).jsonp(err_message);
+  } 
 })
 
 module.exports = router;
